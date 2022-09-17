@@ -33,6 +33,14 @@ Atm_led& Atm_led::begin( int attached_pin, bool activeLow ) {
   return *this;
 }
 
+int skn_analogWrite(uint8_t pin, int val) {
+	#if defined(ARDUINO_ARCH_ESP32)
+		ledcWrite(1, val);
+  	#else
+		analogWrite(pin, val);
+	#endif	
+}	
+
 Atm_led& Atm_led::pwm( uint16_t width, float freq ) {
 
     if ( freq > -1 ) {	
