@@ -33,16 +33,6 @@ Atm_led& Atm_led::begin( int attached_pin, bool activeLow ) {
   return *this;
 }
 
-void Atm_led::initLED() {
-  #if defined(ARDUINO_ARCH_ESP32)
-	ledcAttachPin(pin, 1);
- 	ledcSetup(1, 5000, 8);
-  #else
-	pinMode(pin, OUTPUT);
-  #endif
-	digitalWrite(pin, activeLow ? HIGH : LOW);
-}
-
 Atm_led& Atm_led::pwm( uint16_t width, float freq ) {
 
     if ( freq > -1 ) {	
