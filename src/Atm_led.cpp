@@ -33,6 +33,16 @@ Atm_led& Atm_led::begin( int attached_pin, bool activeLow ) {
   return *this;
 }
 
+void Atm_led::initLED() {
+  #if defined(ARDUINO_ARCH_ESP32)
+	ledcAttachPin(pin, 1);
+ 	ledcSetup(1, 5000, 8);
+  #else
+	pinMode(pin, OUTPUT);
+  #endif
+	digitalWrite(pin, activeLow ? HIGH : LOW);
+}
+
 Atm_led& Atm_led::pwm( uint16_t width, float freq ) {
 
     if ( freq > -1 ) {	
@@ -222,7 +232,12 @@ Atm_led& Atm_led::trace( Stream& stream ) {
 }
 
 void Atm_led::initLED() {
-	pinMode(pin, OUTPUT);
+	#if defined(ARDUINO_ARCH_ESP32)
+		ledcAttachPin(pin, 1);
+ 		ledcSetup(1, 5000, 8);
+  	#else
+		pinMode(pin, OUTPUT);
+	#endif
 	digitalWrite(pin, activeLow ? HIGH : LOW);
 }
 
@@ -235,7 +250,7 @@ void Atm_led::switchOn() {
 		if (level == toHigh) {
 			digitalWrite(pin, HIGH);
 		} else {
-			analogWrite(pin, mapLevel(level));
+			skn_analogWrite(pin, mapLevel(level));
 		}
 	}
 }
@@ -247,11 +262,11 @@ void Atm_led::switchOff() {
 		if (level == toHigh) {
 			digitalWrite(pin, HIGH);
 		} else {
-			analogWrite(pin, mapLevel(level));
+			skn_analogWrite(pin, mapLevel(level));
 		}
 	}
 }
 
 void Atm_led::setBrightness(int value) {
-	analogWrite( pin, value );
+	skn_analogWrite( pin, value );
 }
