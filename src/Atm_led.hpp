@@ -44,6 +44,7 @@ class Atm_led : public Machine {
   atm_connector onfinish;
   unsigned char* levelMap;
   int levelMapSize;  
+  int skn_analogWrite(uint8_t pin, int val);
 
 
   int event( int id );
